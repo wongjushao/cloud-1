@@ -1,0 +1,27 @@
+---
+- name: Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Set UFW default incoming policy
+  ansible.builtin.command: ufw default deny incoming
+  changed_when: false
+
+- name: Set UFW default outgoing policy
+  ansible.builtin.command: ufw default allow outgoing
+  changed_when: false
+
+- name: Allow required inbound ports
+  ansible.builtin.command: "ufw allow {{ item }}/tcp"
+  loop:
+    - "22"
+    - "80"
+    - "443"
+  register: ufw_allow
+  changed_when: "'Rule added' in ufw_allow.stdout"
+
+- name: Enable UFW
+  ansible.builtin.command: ufw --force enable
+  register: ufw_enable
+  changed_when: "'Firewall is active and enabled on system startup' not in ufw_enable.stdout"

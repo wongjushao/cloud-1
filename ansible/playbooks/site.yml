@@ -1,0 +1,37 @@
+---
+- name: Deploy Inception WordPress stack
+  hosts: inception
+  gather_facts: true
+
+  vars:
+    inception_deploy_dir: "{{ lookup('env', 'INCEPTION_DEPLOY_DIR') | default('/opt/inception', true) }}"
+    data_path: "{{ lookup('env', 'DATA_PATH') }}"
+    ssl_path: "{{ lookup('env', 'SSL_PATH') | default(lookup('env', 'INCEPTION_DEPLOY_DIR') | default('/opt/inception', true) ~ '/secrets/ssl', true) }}"
+
+  pre_tasks:
+    - name: Verify required environment variables are set
+      ansible.builtin.assert:
+        that:
+          - lookup('env', 'ANSIBLE_USER') | length > 0
+          - lookup('env', 'ANSIBLE_SSH_PRIVATE_KEY_FILE') | length > 0
+          - lookup('env', 'DATA_PATH') | length > 0
+          - lookup('env', 'MYSQL_ROOT_PASSWORD') | length > 0
+          - lookup('env', 'MYSQL_PASSWORD') | length > 0
+          - lookup('env', 'WP_ADMIN_PASSWORD') | length > 0
+          - lookup('env', 'WP_ADMIN_EMAIL') | length > 0
+          - lookup('env', 'WP_USER_PASSWORD') | length > 0
+          - lookup('env', 'WP_USER_EMAIL') | length > 0
+        fail_msg: >
+          Missing configuration. Copy .env.example to .env,
+          set all values, then run: make deploy
+        quiet: true
+
+  roles:
+    - role: common
+      tags: common
+    - role: docker
+      tags: docker
+    - role: firewall
+      tags: firewall
+    - role: inception
+      tags: inception
