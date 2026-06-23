@@ -2,7 +2,7 @@
 set -e
 
 chown -R mysql:mysql /var/lib/mysql
-chmod -R 755 /var/lib/mysql
+chmod -R 700 /var/lib/mysql
 
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB data directory..."
