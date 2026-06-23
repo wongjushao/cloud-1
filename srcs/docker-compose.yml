@@ -38,14 +38,15 @@ services:
 
   phpmyadmin:
     container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin:inception
+    build:
+      context: ./requirements/phpmyadmin
+      dockerfile: Dockerfile
     env_file:
       - ../.env
     environment:
       PMA_HOST: mariadb
       PMA_PORT: 3306
-      PMA_USER: ${MYSQL_USER}
-      PMA_PASSWORD: ${MYSQL_PASSWORD}
       PMA_ABSOLUTE_URI: https://${DOMAIN_NAME}/phpmyadmin/
     networks:
       - inception
