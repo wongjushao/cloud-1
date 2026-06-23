@@ -38,7 +38,10 @@ services:
 
   phpmyadmin:
     container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin:inception
+    build:
+      context: ./requirements/phpmyadmin
+      dockerfile: Dockerfile
     env_file:
       - ../.env
     environment:

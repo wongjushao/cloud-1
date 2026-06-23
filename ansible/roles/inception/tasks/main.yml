@@ -35,7 +35,7 @@
 
 - name: Check if Inception Docker images exist
   ansible.builtin.command:
-    cmd: docker image inspect mariadb:inception wordpress:inception nginx:inception
+    cmd: docker image inspect mariadb:inception wordpress:inception nginx:inception phpmyadmin:inception
   register: images_check
   failed_when: false
   changed_when: false
