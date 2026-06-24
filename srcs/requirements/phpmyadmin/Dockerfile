@@ -20,6 +20,7 @@ RUN wget -q "https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMy
         -O /tmp/phpmyadmin.tar.gz && \
     tar -xzf /tmp/phpmyadmin.tar.gz -C /var/www/html --strip-components=1 && \
     rm /tmp/phpmyadmin.tar.gz && \
+    rm -f /var/www/html/index.html && \
     chown -R www-data:www-data /var/www/html && \
     a2enmod rewrite
 
